@@ -53,8 +53,10 @@
         body { 
             font-family: 'Exo 2', sans-serif;
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 46, 46, 0.3) 0%, transparent 30%),
-                radial-gradient(circle at 90% 80%, rgba(8, 1, 54, 0.5) 0%, transparent 40%);
+                url('https://uquewqduoplzbqpoiiba.supabase.co/storage/v1/object/public/images/01b9dccc-ee9f-4fff-b294-86d9ab65c688/image.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             height: 100vh;
             overflow: hidden;
             position: relative;
@@ -154,6 +156,17 @@
             font-family: 'Courier New', monospace;
             animation: fall linear infinite;
         }
+
+        #scrollUpBtn, #scrollDownBtn {
+            box-shadow: 0 0 15px rgba(0, 255, 194, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        #scrollUpBtn:hover, #scrollDownBtn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 255, 194, 0.5);
+            background-color: rgba(0, 255, 194, 0.1) !important;
+        }
         @keyframes fall {
             to {
                 transform: translateY(100vh);
@@ -174,8 +187,18 @@
     <div class="absolute w-64 h-64 rounded-full bg-cyan-500 opacity-5 mix-blend-screen pointer-events-none top-2/3 right-1/4 animate-float animation-delay-2000"></div>
     <div class="absolute w-80 h-80 rounded-full bg-teal-500 opacity-7 mix-blend-screen pointer-events-none bottom-1/4 right-1/3 animate-float animation-delay-3000"></div>
 
+    <!-- Scroll Indicator -->
+    <div class="fixed right-8 bottom-8 z-50 flex flex-col items-center gap-4">
+        <button id="scrollUpBtn" class="w-12 h-12 bg-teal-900/70 hover:bg-teal-800/90 border border-teal-700/50 rounded-full flex items-center justify-center text-teal-400 transition-all duration-300 opacity-0 invisible">
+            <i class="fas fa-chevron-up"></i>
+        </button>
+        <button id="scrollDownBtn" class="w-12 h-12 bg-teal-900/70 hover:bg-teal-800/90 border border-teal-700/50 rounded-full flex items-center justify-center text-teal-400 transition-all duration-300">
+            <i class="fas fa-chevron-down"></i>
+        </button>
+    </div>
+
     <!-- Main Content -->
-    <main class="relative flex flex-col items-center justify-center py-20 px-4 max-w-7xl mx-auto text-center z-10 w-full">
+    <main class="relative flex flex-col items-center justify-center py-20 px-4 max-w-7xl mx-auto text-center z-10 w-full" id="mainContent">
         <!-- Diamond Grid Background -->
         <div class="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
             <div class="w-full h-full">
@@ -452,8 +475,63 @@
             }, 1000);
         }
         
+        // Scroll functionality
+        function setupScroll() {
+            const scrollUpBtn = document.getElementById('scrollUpBtn');
+            const scrollDownBtn = document.getElementById('scrollDownBtn');
+            const mainContent = document.getElementById('mainContent');
+            
+            // Show/hide buttons based on scroll position
+            function toggleScrollButtons() {
+                const scrollY = window.scrollY;
+                const windowHeight = window.innerHeight;
+                const docHeight = document.body.scrollHeight;
+                
+                if (scrollY > windowHeight / 2) {
+                    scrollUpBtn.classList.remove('opacity-0', 'invisible');
+                    scrollUpBtn.classList.add('opacity-100', 'visible');
+                } else {
+                    scrollUpBtn.classList.add('opacity-0', 'invisible');
+                    scrollUpBtn.classList.remove('opacity-100', 'visible');
+                }
+                
+                if (scrollY + windowHeight >= docHeight - 100) {
+                    scrollDownBtn.classList.add('opacity-0', 'invisible');
+                    scrollDownBtn.classList.remove('opacity-100', 'visible');
+                } else {
+                    scrollDownBtn.classList.remove('opacity-0', 'invisible');
+                    scrollDownBtn.classList.add('opacity-100', 'visible');
+                }
+            }
+            
+            // Smooth scroll functions
+            function scrollUp() {
+                window.scrollBy({
+                    top: -window.innerHeight,
+                    behavior: 'smooth'
+                });
+            }
+            
+            function scrollDown() {
+                window.scrollBy({
+                    top: window.innerHeight,
+                    behavior: 'smooth'
+                });
+            }
+            
+            // Event listeners
+            scrollUpBtn.addEventListener('click', scrollUp);
+            scrollDownBtn.addEventListener('click', scrollDown);
+            window.addEventListener('scroll', toggleScrollButtons);
+            window.addEventListener('resize', toggleScrollButtons);
+            
+            // Initialize
+            toggleScrollButtons();
+        }
+
         // Initialize effects
         document.addEventListener('DOMContentLoaded', () => {
+            setupScroll();
             createBinaryRain();
             updateCountdown();
             setInterval(updateCountdown, 1000);
