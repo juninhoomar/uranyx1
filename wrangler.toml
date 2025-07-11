@@ -1,0 +1,12 @@
+name = "uranyx1"
+main = "workers-site/index.js"
+compatibility_date = "2023-12-01"
+
+[site]
+bucket = "./dist"
+
+[env.production]
+name = "uranyx1-production"
+
+[env.staging]
+name = "uranyx1-staging"

@@ -1,0 +1,24 @@
+{
+  "name": "uranyx1",
+  "version": "1.0.0",
+  "description": "Uranyx landing page deployed on Cloudflare Workers",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "build": "mkdir -p dist && cp index.html dist/ && cp style.css dist/",
+    "preview": "wrangler dev --local"
+  },
+  "keywords": [
+    "cloudflare",
+    "workers",
+    "static-site",
+    "uranyx"
+  ],
+  "author": "Uranyx Technologies",
+  "license": "MIT",
+  "devDependencies": {
+    "@cloudflare/kv-asset-handler": "^0.3.0",
+    "wrangler": "^4.24.1"
+  }
+}
